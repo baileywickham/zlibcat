@@ -2,16 +2,18 @@ package main
 
 import (
 	"compress/zlib"
-	"flag"
 	"io"
 	"os"
 )
 
 func main() {
-	var filename = flag.String("filepath", "", "file to unzip")
-	flag.Parse()
+	if len(os.Args) == 1 {
+		usage()
+		return
+	}
+	filename := os.Args[1]
 
-	file, err := os.Open(*filename)
+	file, err := os.Open(filename)
 	if err != nil {
 		panic(err)
 	}
@@ -20,4 +22,8 @@ func main() {
 		panic(err)
 	}
 	io.Copy(os.Stdout, r)
+}
+
+func usage() {
+	println("zlibcat <filename>")
 }
